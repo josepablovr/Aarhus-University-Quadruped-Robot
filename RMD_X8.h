@@ -31,7 +31,7 @@
 
 typedef struct {
 
-    int8_t id;
+    int16_t id;
 
     int8_t  temperature;
     int16_t voltage;
@@ -67,10 +67,12 @@ typedef struct {
     int8_t  torque_Ki;
 
     char motor_state;
+
+
     //Processed data
-    float position;
-    float speed;
-    float torque;
+    float angular_position;
+    float angular_speed;
+    float joint_torque;
 
     
 } Motor_Status;
@@ -93,7 +95,7 @@ typedef struct {
 
 
 
-enum class ControlMode {
+typedef enum {
     Read_PID_data,
     Write_PID_to_RAM,
     Read_Acceleration,
@@ -115,41 +117,43 @@ enum class ControlMode {
     Position_Control_2,
     Position_Control_3,
     Position_Control_4,
-    Torque_Control_Broadcast,
+    Torque_Control_Broadcast
+} ControlMode;
 
-};
+
 
 int countTurns(EncoderCounter *encoder, int current_value);
 void process_single_turn_angle(EncoderCounter *encoder, Motor_Status *motor);
-void command_get_motor_status(unsigned char command, unsigned char can_data[8]);
-void command_read_pid_RAM(unsigned char can_data[8]);
-void command_write_pid_RAM(unsigned char can_data[8], int8_t  position_Kp, 
+
+void command_read_pid_RAM(unsigned char data_frame[8]);
+void command_write_pid_RAM(unsigned char data_frame[8], int8_t  position_Kp, 
 int8_t  position_Ki, int8_t  speed_Kp,int8_t  speed_Ki, int8_t  torque_Kp, 
 int8_t  torque_Ki);
-void command_write_pid_ROM(unsigned char can_data[8], int8_t  position_Kp, 
+void command_write_pid_ROM(unsigned char data_frame[8], int8_t  position_Kp, 
 int8_t  position_Ki, int8_t  speed_Kp,int8_t  speed_Ki, int8_t  torque_Kp, 
 int8_t  torque_Ki);
 #endif // CAN_MESSAGES_H
-void command_read_acceleration(unsigned char can_data[8]);
-void command_write_acceleration(unsigned char can_data[8], int32_t  acceleration);
-void command_read_encoder(unsigned char can_data[8]);
-void command_write_encoder_offset(unsigned char can_data[8], int16_t  offset);
-void command_write_encoder_zero(unsigned char can_data[8], int16_t  zero);
-void command_read_multi_turn_angle(unsigned char can_data[8]);
-void command_read_single_turn_angle(unsigned char can_data[8]);
-void command_read_motor_status_1(unsigned char can_data[8]);
-void command_clear_error_flag(unsigned char can_data[8]);
-void command_read_motor_status_2(unsigned char can_data[8]);
-void command_read_motor_status_3(unsigned char can_data[8]);
-void command_motor_OFF(unsigned char can_data[8]);
-void command_motor_STOP(unsigned char can_data[8]);
-void command_motor_RUN(unsigned char can_data[8]);
-void command_torque_control(unsigned char can_data[8], int16_t torque_current);
-void command_speed_control(unsigned char can_data[8], int32_t speed);
-void command_position_control_1(unsigned char can_data[8], int32_t position);
-void command_position_control_2(unsigned char can_data[8], int32_t position, int16_t speed);
-void command_position_control_3(unsigned char can_data[8], unsigned int direction, int16_t position);
-void command_position_control_4(unsigned char can_data[8], unsigned int direction, int16_t position,int16_t speed);
-void command_torque_control_broadcast(unsigned char command, unsigned char can_data[8], int16_t torque_1, int16_t torque_2, int16_t torque_3, int16_t torque_4);
-void message_handler(unsigned char can_data[8], Motor_Status *motor);
-void motor_identifier(unsigned int id, unsigned char can_data[8], Leg *leg);
+void command_read_acceleration(unsigned char data_frame[8]);
+void command_write_acceleration(unsigned char data_frame[8], int32_t  acceleration);
+void command_read_encoder(unsigned char data_frame[8]);
+void command_write_encoder_offset(unsigned char data_frame[8], int16_t  offset);
+void command_write_encoder_zero(unsigned char data_frame[8], int16_t  zero);
+void command_read_multi_turn_angle(unsigned char data_frame[8]);
+void command_read_single_turn_angle(unsigned char data_frame[8]);
+void command_read_motor_status_1(unsigned char data_frame[8]);
+void command_clear_error_flag(unsigned char data_frame[8]);
+void command_read_motor_status_2(unsigned char data_frame[8]);
+void command_read_motor_status_3(unsigned char data_frame[8]);
+void command_motor_OFF(unsigned char data_frame[8]);
+void command_motor_STOP(unsigned char data_frame[8]);
+void command_motor_RUN(unsigned char data_frame[8]);
+void command_torque_control(unsigned char data_frame[8], int16_t torque_current);
+void command_speed_control(unsigned char data_frame[8], int32_t speed);
+void command_position_control_1(unsigned char data_frame[8], int32_t position);
+void command_position_control_2(unsigned char data_frame[8], int32_t position, int16_t speed);
+void command_position_control_3(unsigned char data_frame[8], unsigned int direction, int16_t position);
+void command_position_control_4(unsigned char data_frame[8], unsigned int direction, int16_t position,int16_t speed);
+void command_torque_control_broadcast(unsigned char data_frame[8], int16_t torque_1, int16_t torque_2, int16_t torque_3, int16_t torque_4);
+void message_handler(unsigned char data_frame[8], Motor_Status *motor);
+void message_generator(unsigned char data_frame[8], ControlMode Mode);
+void motor_identifier(unsigned int id, unsigned char data_frame[8], Leg *leg);;
