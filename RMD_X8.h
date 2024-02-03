@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h> 
+#include <linux/can.h>
 #ifndef CAN_MESSAGES_H
 #define CAN_MESSAGES_H
 
@@ -30,7 +31,7 @@
 
 
 typedef struct {
-
+    int16_t leg_index;
     int16_t id;
 
     int8_t  temperature;
@@ -43,13 +44,13 @@ typedef struct {
     unsigned int temperature_status;  
 
    
-    int16_t torque_current;
-    int16_t speed;
+    float torque_current;
+    float speed;
     
 
     //Encoder
-    int64_t  multi_angle_position;
-    int16_t  single_angle_position;    
+    float  multi_angle_position;
+    float  single_angle_position;    
     int16_t  encoder_zero_position;
     int16_t  encoder_offset;  
 
@@ -68,10 +69,11 @@ typedef struct {
 
     char motor_state;
 
-
-    //Processed data
     float angular_position;
-    float angular_speed;
+    //Processed data
+    
+    float joint_angle;
+    float joint_speed;
     float joint_torque;
 
     
@@ -79,7 +81,7 @@ typedef struct {
 
 
 typedef struct {
-    int socket_number;    
+    unsigned int leg_index;    
     Motor_Status shoulder;          // Contador de vueltas
     Motor_Status hip;  // Valor anterior del encoder
     Motor_Status knee;        // Dirección del encoder
@@ -87,43 +89,18 @@ typedef struct {
 
 
 
-typedef struct {
-    int counter;          // Contador de vueltas
-    int previous_value;   // Valor anterior del encoder
-    int direction;        // Dirección del encoder
-} EncoderCounter;
 
 
 
 typedef enum {
-    Read_PID_data,
-    Write_PID_to_RAM,
-    Read_Acceleration,
-    Write_Acceleration,
-    Read_Encoder,
-    Write_Encoder_Offset,
     Read_Multi_Turn,
-    Read_Single_Angle,
-    Read_Status_1,
-    Clear_Error_Flag,
-    Read_Status_2,
-    Read_Status_3,
-    Motor_OFF,
-    Motor_Stop,
-    Motor_Run,
+    Read_Status,
     Torque_Control,
-    Speed_Control,
-    Position_Control_1,
-    Position_Control_2,
-    Position_Control_3,
-    Position_Control_4,
-    Torque_Control_Broadcast
+    Position_Control
+  
 } ControlMode;
 
 
-
-int countTurns(EncoderCounter *encoder, int current_value);
-void process_single_turn_angle(EncoderCounter *encoder, Motor_Status *motor);
 
 void command_read_pid_RAM(unsigned char data_frame[8]);
 void command_write_pid_RAM(unsigned char data_frame[8], int8_t  position_Kp, 
@@ -150,10 +127,17 @@ void command_motor_RUN(unsigned char data_frame[8]);
 void command_torque_control(unsigned char data_frame[8], int16_t torque_current);
 void command_speed_control(unsigned char data_frame[8], int32_t speed);
 void command_position_control_1(unsigned char data_frame[8], int32_t position);
-void command_position_control_2(unsigned char data_frame[8], int32_t position, int16_t speed);
+void command_position_control_2(unsigned char data_frame[8], float position, int speed);
 void command_position_control_3(unsigned char data_frame[8], unsigned int direction, int16_t position);
 void command_position_control_4(unsigned char data_frame[8], unsigned int direction, int16_t position,int16_t speed);
 void command_torque_control_broadcast(unsigned char data_frame[8], int16_t torque_1, int16_t torque_2, int16_t torque_3, int16_t torque_4);
-void message_handler(unsigned char data_frame[8], Motor_Status *motor);
+void message_handler(const can_frame& frame, Leg *leg);
 void message_generator(unsigned char data_frame[8], ControlMode Mode);
-void motor_identifier(unsigned int id, unsigned char data_frame[8], Leg *leg);;
+void motor_identifier(const can_frame& frame, Leg *leg);
+void readings_corrections(int leg_index, float* torques, float* speeds, float* encoders,
+                          float* torques_correction, float* speed_correction, float* angles_correction);
+void angle_corrections(int leg_index, float* encoders, float* angles_correction);
+void real_robot_commands_angles(int leg_index, float* positions);
+void real_robot_commands_torques(int leg_index, float*torques_command);
+int Security_Position_Joint(float *desired_positions);
+ControlMode intToMode(int mode);

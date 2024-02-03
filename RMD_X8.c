@@ -4,31 +4,6 @@
 #include <string.h>
 
 
-int countTurns(EncoderCounter *encoder, int current_value) {
-   
-    if (current_value < 0) {
-        current_value = 65536 + current_value;
-    }
-
-    if (current_value - encoder->previous_value > 60000) {
-        encoder->counter -= 1;
-    } else if (current_value - encoder->previous_value < -60000) {
-        encoder->counter += 1;
-    }
-
-    encoder->previous_value = current_value;
-    return encoder->counter;
-}
-
-
-void process_single_turn_angle(EncoderCounter *encoder, Motor_Status *motor) {
-    int turns = countTurns(encoder, motor->single_angle_position); 
-    motor->angular_position = ((float)motor->single_angle_position+65536*(float)turns)/1638.4;
-}
-
-
-
-
 
 void command_read_pid_RAM(unsigned char data_frame[8]) {
     unsigned char can_data[8];
@@ -295,13 +270,30 @@ void command_position_control_2(unsigned char data_frame[8], int32_t position, i
     unsigned char can_data[8];
     can_data[0] = POSITION_CTRL_2;
     can_data[1] = 0x00;
-    can_data[2] = speed & 0xFF;
-    can_data[3] = (speed >> 8) & 0xFF;
-    can_data[4] = position & 0xFF;
-    can_data[5] = (position >> 8) & 0xFF;
-    can_data[6] = (position >> 16) & 0xFF;
-    can_data[7] = (position >> 24) & 0xFF; 
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    
+    if (speed <= 255) {
+        can_data[2] = speed & 0xFF;
+        can_data[3] = 0x00;
+    } else {
+        can_data[2] = speed & 0xFF;
+        can_data[3] = (speed >> 8) & 0xFF;
+    }
+
+    if (position >= 0) {
+        uint32_t new_encoder_data = (uint32_t)(position * 100 * 9);
+        can_data[4] = new_encoder_data & 0xFF;
+        can_data[5] = (new_encoder_data >> 8) & 0xFF;
+        can_data[6] = (new_encoder_data >> 16) & 0xFF;
+        can_data[7] = (new_encoder_data >> 24) & 0xFF;
+    } else {
+        uint32_t new_encoder_data = (uint32_t)(position * 100 * 9);
+        can_data[4] = (new_encoder_data >> 24) & 0xFF;
+        can_data[5] = (new_encoder_data >> 16) & 0xFF;
+        can_data[6] = (new_encoder_data >> 8) & 0xFF;
+        can_data[7] = new_encoder_data & 0xFF;
+    }
+
+    memcpy(data_frame, can_data, sizeof(can_data));
 }
 void command_position_control_3(unsigned char data_frame[8], unsigned int direction, int16_t position) {
     unsigned char can_data[8];   
