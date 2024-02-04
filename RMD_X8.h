@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdint.h> 
+
+#include <sys/socket.h>
 #include <linux/can.h>
+#include <linux/can/raw.h>
+
 #ifndef CAN_MESSAGES_H
 #define CAN_MESSAGES_H
 
@@ -131,9 +135,9 @@ void command_position_control_2(unsigned char data_frame[8], float position, int
 void command_position_control_3(unsigned char data_frame[8], unsigned int direction, int16_t position);
 void command_position_control_4(unsigned char data_frame[8], unsigned int direction, int16_t position,int16_t speed);
 void command_torque_control_broadcast(unsigned char data_frame[8], int16_t torque_1, int16_t torque_2, int16_t torque_3, int16_t torque_4);
-void message_handler(const can_frame& frame, Leg *leg);
+void message_handler(struct can_frame frame, Leg *leg);
 void message_generator(unsigned char data_frame[8], ControlMode Mode);
-void motor_identifier(const can_frame& frame, Leg *leg);
+void motor_identifier(struct can_frame frame, Leg *leg);
 void readings_corrections(int leg_index, float* torques, float* speeds, float* encoders,
                           float* torques_correction, float* speed_correction, float* angles_correction);
 void angle_corrections(int leg_index, float* encoders, float* angles_correction);

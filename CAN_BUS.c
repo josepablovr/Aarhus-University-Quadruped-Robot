@@ -23,6 +23,7 @@
 
 #define MAX_WAIT_TIME_SECONDS 5 // Maximum waiting time in seconds
 
+
 int receiveMessage2(int socket, Leg *leg, unsigned int debug_mode) {
     struct can_frame frame;
 
@@ -172,3 +173,99 @@ MainState intToState(int state) {
             return IDLE; // or any default state you prefer
     }
 }
+
+
+			
+int get_Multi_turn_angle(int s, Leg *leg){		
+    int debug = 0;   
+    int msgs_received = 0;
+    unsigned char data_frame[8];
+    command_read_multi_turn_angle(data_frame);   
+                
+    sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
+    sendMessage(s, leg->hip.id, data_frame, 8, 0);
+    if (receiveMessage2(s, leg, debug) == 0)         
+        msgs_received += 1;                    
+    if (receiveMessage2(s, leg, debug) == 0) 
+        msgs_received += 1; 
+    sendMessage(s, leg->knee.id, data_frame, 8, 0);
+    if (receiveMessage2(s, leg, debug) == 0)          
+        msgs_received += 1;
+        
+    if (msgs_received != 3)
+        return 0;
+    return 1;
+}
+		
+int get_Read_Status(int s, Leg *leg){
+    int debug = 0;
+    int msgs_received = 0;
+    unsigned char data_frame[8];    
+    command_read_motor_status_2(data_frame);               
+    sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
+    sendMessage(s, leg->hip.id, data_frame, 8, 0);
+    if (receiveMessage2(s, leg, debug) == 0)         
+        msgs_received += 1;                    
+    if (receiveMessage2(s, leg, debug) == 0) 
+        msgs_received += 1; 
+    sendMessage(s, leg->knee.id, data_frame, 8, 0);
+    if (receiveMessage2(s, leg, debug) == 0)          
+        msgs_received += 1;
+    
+    if (msgs_received != 3)
+        return 0;
+    return 1;
+}
+int get_Torque_Control(int s, Leg *leg, float torques_command[3]){
+    int debug = 0;
+    unsigned char data_frame[8];
+    int msgs_received = 0;
+    real_robot_commands_torques(leg->leg_index, torques_command);
+    command_torque_control(data_frame, torques_command[0]);              
+    sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
+    command_torque_control(data_frame, torques_command[1]);
+    sendMessage(s, leg->hip.id, data_frame, 8, 0);
+    if (receiveMessage2(s, leg, debug) == 0)         
+        msgs_received += 1;                    
+    if (receiveMessage2(s, leg, debug) == 0) 
+        msgs_received += 1; 
+    command_torque_control(data_frame, torques_command[2]);
+    sendMessage(s, leg->knee.id, data_frame, 8, 0);
+    if (receiveMessage2(s, leg, debug) == 0)          
+        msgs_received += 1;
+    
+    if (msgs_received != 3)
+        return 0;
+    return 1;
+}
+		
+int get_Position_Control(int s, Leg *leg, float position_command[3], int speed_pos_ctr[3]){
+    int debug = 0;
+    unsigned char data_frame[8];
+    int msgs_received = 0;
+    
+    if(Security_Position_Joint(position_command) == 1){
+    
+        real_robot_commands_angles(leg->leg_index, position_command);
+                
+        command_position_control_2(data_frame, position_command[0], speed_pos_ctr[0]);  
+        sendMessage(s, leg->shoulder.id, data_frame, 8, 0);									
+        command_position_control_2(data_frame, position_command[1], speed_pos_ctr[1]);
+        sendMessage(s, leg->hip.id, data_frame, 8, 0);
+        
+        if (receiveMessage2(s, leg, debug) == 0)         
+            msgs_received += 1;                    
+        if (receiveMessage2(s, leg, debug) == 0) 
+            msgs_received += 1; 
+        command_position_control_2(data_frame, position_command[2], speed_pos_ctr[2]);
+        sendMessage(s, leg->knee.id, data_frame, 8, 0);
+        if (receiveMessage2(s, leg, debug) == 0)          
+            msgs_received += 1;
+    
+        if (msgs_received != 3)
+            return 0;
+        return 1;
+    }
+    else {
+    return 0;}
+    }
