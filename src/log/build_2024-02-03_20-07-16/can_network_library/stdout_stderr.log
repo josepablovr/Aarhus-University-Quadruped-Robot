@@ -1,0 +1,38 @@
+-- Found ament_cmake: 2.0.3 (/home/pi/ros2_iron/install/ament_cmake/share/ament_cmake/cmake)
+-- Found ament_lint_auto: 0.14.2 (/home/pi/ros2_iron/install/ament_lint_auto/share/ament_lint_auto/cmake)
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: /home/pi/ros2_ws/src/can_network_library/include
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/pi/ros2_ws/src/build/can_network_library
+[100%] Built target Leg_CAN_Network
+-- Install configuration: ""
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/environment/library_path.sh
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/environment/library_path.dsv
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/include/can_network_library
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/include/can_network_library/EncoderCounter.h
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/include/can_network_library/RMD_X8.h
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/include/can_network_library/CAN_BUS.h
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/include/can_network_library/Leg_CAN_Network.h
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/lib/libLeg_CAN_Network.a
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/ament_index/resource_index/package_run_dependencies/can_network_library
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/ament_index/resource_index/parent_prefix_path/can_network_library
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/environment/path.dsv
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/local_setup.bash
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/local_setup.sh
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/local_setup.zsh
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/local_setup.dsv
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/package.dsv
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/ament_index/resource_index/packages/can_network_library
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/cmake/Leg_CAN_NetworkExport.cmake
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/cmake/Leg_CAN_NetworkExport-noconfig.cmake
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/cmake/can_network_libraryConfig.cmake
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/cmake/can_network_libraryConfig-version.cmake
+-- Up-to-date: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/package.xml

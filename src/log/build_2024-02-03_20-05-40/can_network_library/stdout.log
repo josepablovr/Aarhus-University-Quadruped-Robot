@@ -1,0 +1,21 @@
+-- Found ament_cmake: 2.0.3 (/home/pi/ros2_iron/install/ament_cmake/share/ament_cmake/cmake)
+-- Found ament_lint_auto: 0.14.2 (/home/pi/ros2_iron/install/ament_lint_auto/share/ament_lint_auto/cmake)
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: /home/pi/ros2_ws/src/can_network_library/include
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/pi/ros2_ws/src/build/can_network_library
+[ 20%] [32mBuilding CXX object CMakeFiles/Leg_CAN_Network.dir/src/Leg_CAN_Network.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/Leg_CAN_Network.dir/src/EncoderCounter.cpp.o[0m
+[ 60%] [32mBuilding C object CMakeFiles/Leg_CAN_Network.dir/src/RMD_X8.c.o[0m
+[ 80%] [32mBuilding C object CMakeFiles/Leg_CAN_Network.dir/src/CAN_BUS.c.o[0m
+[100%] [32m[1mLinking CXX static library libLeg_CAN_Network.a[0m
+[100%] Built target Leg_CAN_Network
+-- Install configuration: ""
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/environment/library_path.sh
+-- Installing: /home/pi/ros2_ws/src/install/can_network_library/share/can_network_library/environment/library_path.dsv

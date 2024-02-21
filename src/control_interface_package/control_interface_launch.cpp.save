@@ -1,0 +1,11 @@
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp_components/register_node_macro.hpp"
+#include "control_interface_package/my_node.hpp"
+
+int main(int argc, char** argv) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared<my_control_interface_package::MyNode>();
+    rclcpp::spin(node);
+    rclcpp::shutdown();
+    return 0;
+}

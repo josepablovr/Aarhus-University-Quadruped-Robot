@@ -1,0 +1,9 @@
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/uninstall.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/comm_interface_uninstall.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/test.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/edit_cache.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/rebuild_cache.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/list_install_components.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/install.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/install/local.dir
+/home/pi/ros2_ws/src/build/comm_interface/CMakeFiles/install/strip.dir

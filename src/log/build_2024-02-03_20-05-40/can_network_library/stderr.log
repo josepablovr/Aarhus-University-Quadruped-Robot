@@ -1,0 +1,10 @@
+[01m[K/home/pi/ros2_ws/src/can_network_library/src/CAN_BUS.c:[m[K In function ‘[01m[KreceiveMessage2[m[K’:
+[01m[K/home/pi/ros2_ws/src/can_network_library/src/CAN_BUS.c:27:56:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kdebug_mode[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   27 | int receiveMessage2(int socket, Leg *leg, [01;35m[Kunsigned int debug_mode[m[K) {
+      |                                           [01;35m[K~~~~~~~~~~~~~^~~~~~~~~~[m[K
+[31mCMake Error at cmake_install.cmake:54 (file):
+  file INSTALL cannot find
+  "/home/pi/ros2_ws/src/can_network_library/include/Leg_CAN_Network": No such
+  file or directory.
+
+[0m
