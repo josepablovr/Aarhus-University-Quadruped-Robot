@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
-
+#include <iostream>
 
 #ifndef CAN_MESSAGES_H
 #define CAN_MESSAGES_H
@@ -33,6 +33,11 @@
 #define POSITION_CTRL_2          (0xA4)
 #define POSITION_CTRL_3          (0xA5)
 #define POSITION_CTRL_4          (0xA6)
+
+
+
+#define SPEED_MIN 1 // This is just an example, adjust as needed
+#define SPEED_MAX 500 // Maximum acceptable value
 
 
 typedef struct {
@@ -90,6 +95,7 @@ typedef struct {
     Motor_Status shoulder;          // Contador de vueltas
     Motor_Status hip;  // Valor anterior del encoder
     Motor_Status knee;        // Dirección del encoder
+    unsigned int failed_messages;
 } Leg;
 
 
@@ -129,6 +135,7 @@ void command_read_motor_status_3(unsigned char data_frame[8]);
 void command_motor_OFF(unsigned char data_frame[8]);
 void command_motor_STOP(unsigned char data_frame[8]);
 void command_motor_RUN(unsigned char data_frame[8]);
+int16_t get_motor_current(float torque);
 void command_torque_control(unsigned char data_frame[8], int16_t torque_current);
 void command_speed_control(unsigned char data_frame[8], int32_t speed);
 void command_position_control_1(unsigned char data_frame[8], int32_t position);

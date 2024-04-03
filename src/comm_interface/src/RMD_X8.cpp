@@ -21,7 +21,7 @@ void command_read_pid_RAM(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_write_pid_RAM(unsigned char data_frame[8], int8_t  position_Kp, 
@@ -36,7 +36,7 @@ int8_t  torque_Ki) {
     can_data[5] = speed_Ki;
     can_data[6] = torque_Kp;
     can_data[7] = torque_Ki;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 
 }
 
@@ -53,7 +53,7 @@ int8_t  torque_Ki) {
     can_data[5] = speed_Ki;
     can_data[6] = torque_Kp;
     can_data[7] = torque_Ki;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_read_acceleration(unsigned char data_frame[8]) {
@@ -66,7 +66,7 @@ void command_read_acceleration(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_write_acceleration(unsigned char data_frame[8], int32_t  acceleration) {
@@ -79,7 +79,7 @@ void command_write_acceleration(unsigned char data_frame[8], int32_t  accelerati
     can_data[5] = (acceleration >> 8) & 0xFF;
     can_data[6] = (acceleration >> 16) & 0xFF;
     can_data[7] = (acceleration >> 24) & 0xFF;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_read_encoder(unsigned char data_frame[8]) {
@@ -92,7 +92,7 @@ void command_read_encoder(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_write_encoder_offset(unsigned char data_frame[8], int16_t  offset) {
@@ -105,7 +105,7 @@ void command_write_encoder_offset(unsigned char data_frame[8], int16_t  offset) 
     can_data[5] = 0x00;
     can_data[6] = offset & 0xFF;
     can_data[7] = (offset >> 8) & 0xFF;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_write_encoder_zero(unsigned char data_frame[8], int16_t  zero) {
@@ -118,7 +118,7 @@ void command_write_encoder_zero(unsigned char data_frame[8], int16_t  zero) {
     can_data[5] = 0x00;
     can_data[6] = zero & 0xFF;
     can_data[7] = (zero >> 8) & 0xFF;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_read_multi_turn_angle(unsigned char data_frame[8]) {
@@ -131,7 +131,7 @@ void command_read_multi_turn_angle(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_read_single_turn_angle(unsigned char data_frame[8]) {
@@ -144,7 +144,7 @@ void command_read_single_turn_angle(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_read_motor_status_1(unsigned char data_frame[8]) {
@@ -157,7 +157,7 @@ void command_read_motor_status_1(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 void command_clear_error_flag(unsigned char data_frame[8]) {
     unsigned char can_data[8];
@@ -169,7 +169,7 @@ void command_clear_error_flag(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_read_motor_status_2(unsigned char data_frame[8]) {
@@ -182,7 +182,7 @@ void command_read_motor_status_2(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, 8);
 }
 void command_read_motor_status_3(unsigned char data_frame[8]) {
     unsigned char can_data[8];
@@ -194,7 +194,7 @@ void command_read_motor_status_3(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 void command_motor_OFF(unsigned char data_frame[8]) {
     unsigned char can_data[8];
@@ -206,7 +206,7 @@ void command_motor_OFF(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_motor_STOP(unsigned char data_frame[8]) {
@@ -219,7 +219,7 @@ void command_motor_STOP(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_motor_RUN(unsigned char data_frame[8]) {
@@ -232,16 +232,29 @@ void command_motor_RUN(unsigned char data_frame[8]) {
     can_data[5] = 0x00;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 void NegToHex(int16_t num, char *hex_str) {
     snprintf(hex_str, 5, "%04X", (uint16_t)(-num));
 }
+
+
+
+int16_t get_motor_current(float torque) {
+    
+    // Calculate torque_current
+    int16_t torque_current = static_cast<int16_t>(round(torque / 2.09 / 33 * 2000)); //Torque constant / Max current float / Max current int
+
+    // Return torque_current
+    return torque_current;
+}
+
 void command_torque_control(unsigned char data_frame[8], int16_t torque_current) {
     
     
     if (torque_current > 2000 || torque_current < -2000)
-        return;
+        torque_current = 0;
+        
 
     unsigned char can_data[8] = {TORQUE_CLOSED_LOOP, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -268,6 +281,29 @@ void command_torque_control(unsigned char data_frame[8], int16_t torque_current)
         }
         memcpy(data_frame, can_data, sizeof(unsigned char) * 8);
     }
+    
+    bool is_negative = torque_current < 0;
+    torque_current = fabs(torque_current);
+
+    uint32_t new_current = (uint16_t)(torque_current);
+
+
+    if (is_negative) {
+        new_current = ~new_current + 1;  // Two's complement for negative value
+    }
+	
+	
+	can_data[1] = 0X00;
+	can_data[2] = 0X00;
+	can_data[3] = 0X00;
+	
+    can_data[4] = new_current & 0xFF;
+    can_data[5] = (new_current >> 8) & 0xFF;
+    
+    can_data[6] = 0X00;
+	can_data[7] = 0X00;
+    
+    memcpy(data_frame, can_data, sizeof(unsigned char) * 8);
 }
 
 void command_speed_control(unsigned char data_frame[8], int32_t speed) {
@@ -280,7 +316,7 @@ void command_speed_control(unsigned char data_frame[8], int32_t speed) {
     can_data[5] = (speed >> 8) & 0xFF;
     can_data[6] = (speed >> 16) & 0xFF;
     can_data[7] = (speed >> 24) & 0xFF; 
-    memcpy(data_frame, &can_data, sizeof(unsigned char));   
+    memcpy(data_frame, can_data, sizeof(unsigned char));   
 }
 
 void command_position_control_1(unsigned char data_frame[8], int32_t position) {
@@ -293,12 +329,26 @@ void command_position_control_1(unsigned char data_frame[8], int32_t position) {
     can_data[5] = (position >> 8) & 0xFF;
     can_data[6] = (position >> 16) & 0xFF;
     can_data[7] = (position >> 24) & 0xFF; 
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 void command_position_control_2(unsigned char data_frame[8], float position, int speed) {
     unsigned char can_data[8];
     can_data[0] = POSITION_CTRL_2;
     can_data[1] = 0x00;
+    
+    // Get the absolute value of speed
+    speed = std::abs(speed);
+
+    // Check if the absolute value is less than the minimum absolute value
+    if (speed < SPEED_MIN) {
+        // Adjust to speed_min
+        speed = SPEED_MIN;
+    } else if (speed > SPEED_MAX) {
+        // Adjust to speed_max
+        speed = SPEED_MAX;
+    }
+
+    
     
     if (speed <= 255) {
         can_data[2] = speed & 0xFF;
@@ -336,7 +386,7 @@ void command_position_control_3(unsigned char data_frame[8], unsigned int direct
     can_data[5] = (position >> 8) & 0xFF;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 void command_position_control_4(unsigned char data_frame[8], unsigned int direction, int16_t position,int16_t speed) {
     unsigned char can_data[8];
@@ -348,7 +398,7 @@ void command_position_control_4(unsigned char data_frame[8], unsigned int direct
     can_data[5] = (position >> 8) & 0xFF;
     can_data[6] = 0x00;
     can_data[7] = 0x00;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 void command_torque_control_broadcast(unsigned char data_frame[8], int16_t torque_1, int16_t torque_2, int16_t torque_3, int16_t torque_4) {
@@ -361,7 +411,7 @@ void command_torque_control_broadcast(unsigned char data_frame[8], int16_t torqu
     can_data[5] = (torque_3 >> 8) & 0xFF;
     can_data[6] = torque_4 & 0xFF;
     can_data[7] = (torque_4 >> 8) & 0xFF;
-    memcpy(data_frame, &can_data, sizeof(unsigned char));
+    memcpy(data_frame, can_data, sizeof(unsigned char));
 }
 
 
@@ -483,12 +533,30 @@ void message_handler(struct can_frame frame, Motor_Status *motor) {
         motor->phase_C_current =  (can_data[7] << 8) | can_data[6];
         break;}
     
-    case 0xA1:{        
+    case 0xA1:{
         motor->temperature =  can_data[1];
-        motor->torque_current =  (can_data[3] << 8) | can_data[2];
-        motor->speed =  (can_data[5] << 8) | can_data[4];
-        motor->single_angle_position =  (can_data[7] << 8) | can_data[6];
+        
+        // Extract torque current (int16_t)
+        motor->torque_current = ((int16_t)can_data[3] << 8) | can_data[2];
+        if (motor->torque_current > 2048)
+            motor->torque_current -= 65536;
+        motor->torque_current = value_map(motor->torque_current, -2048, 2048, -33, 33);
+        
+        // Extract speed (int16_t)
+        motor->speed = ((int16_t)can_data[5] << 8) | can_data[4];
+        if (motor->speed > 32768)
+            motor->speed -= 65536;
+        motor->speed /= 9.0; // Divide by 9
+        
+        // Extract single angle position (int16_t)
+        motor->single_angle_position = ((int16_t)can_data[7] << 8) | can_data[6];
+        if (motor->single_angle_position > 32768)
+            motor->single_angle_position -= 65536;
+        motor->single_angle_position = value_map(motor->single_angle_position, 0, 65535, 0, 40);
+        
         break;}
+
+    
     case 0xA2:{        
         motor->temperature =  can_data[1];
         motor->torque_current =  (can_data[3] << 8) | can_data[2];
@@ -501,12 +569,30 @@ void message_handler(struct can_frame frame, Motor_Status *motor) {
         motor->speed =  (can_data[5] << 8) | can_data[4];
         motor->single_angle_position =  (can_data[7] << 8) | can_data[6];
         break;}
-    case 0xA4:{        
+    case 0xA4:{
         motor->temperature =  can_data[1];
-        motor->torque_current =  (can_data[3] << 8) | can_data[2];
-        motor->speed =  (can_data[5] << 8) | can_data[4];
-        motor->single_angle_position =  (can_data[7] << 8) | can_data[6];
+        
+        // Extract torque current (int16_t)
+        motor->torque_current = ((int16_t)can_data[3] << 8) | can_data[2];
+        if (motor->torque_current > 2048)
+            motor->torque_current -= 65536;
+        motor->torque_current = value_map(motor->torque_current, -2048, 2048, -33, 33);
+        
+        // Extract speed (int16_t)
+        motor->speed = ((int16_t)can_data[5] << 8) | can_data[4];
+        if (motor->speed > 32768)
+            motor->speed -= 65536;
+        motor->speed /= 9.0; // Divide by 9
+        
+        // Extract single angle position (int16_t)
+        motor->single_angle_position = ((int16_t)can_data[7] << 8) | can_data[6];
+        if (motor->single_angle_position > 32768)
+            motor->single_angle_position -= 65536;
+        motor->single_angle_position = value_map(motor->single_angle_position, 0, 65535, 0, 40);
+        
         break;}
+
+    
     case 0xA5:{        
         motor->temperature =  can_data[1];
         motor->torque_current =  (can_data[3] << 8) | can_data[2];
@@ -614,6 +700,9 @@ void real_robot_commands_angles(int leg_index, float* positions) {
     positions[0] = positions[0] * transformation_matrix[leg_index][0] + theta1_offset * shoulder_offset_transform[leg_index];
     positions[1]= positions[1] * transformation_matrix[leg_index][1] + theta2_offset * transformation_matrix[leg_index][1];
     positions[2] = (positions[2] * transformation_matrix[leg_index][2] + theta3_offset * transformation_matrix[leg_index][2]) * chain_ratio;
+    
+     
+    
 }
 
 
@@ -636,6 +725,7 @@ int is_value_in_range(double value, double *value_range) {
 }
 
 int Security_Position_Joint(float *desired_positions) {
+    
     double t0 = desired_positions[0];
     double t1 = desired_positions[1];
     double t2 = desired_positions[2];

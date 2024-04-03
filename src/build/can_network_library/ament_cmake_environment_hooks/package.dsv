@@ -1,4 +1,0 @@
-source;share/can_network_library/local_setup.bash
-source;share/can_network_library/local_setup.dsv
-source;share/can_network_library/local_setup.sh
-source;share/can_network_library/local_setup.zsh

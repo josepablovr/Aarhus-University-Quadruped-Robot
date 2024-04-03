@@ -1,2 +1,0 @@
-/usr/bin/ar qc libLeg_CAN_Network.a CMakeFiles/Leg_CAN_Network.dir/src/Leg_CAN_Network.cpp.o CMakeFiles/Leg_CAN_Network.dir/src/RMD_X8.c.o CMakeFiles/Leg_CAN_Network.dir/src/CAN_BUS.c.o CMakeFiles/Leg_CAN_Network.dir/src/EncoderCounter.cpp.o
-/usr/bin/ranlib libLeg_CAN_Network.a

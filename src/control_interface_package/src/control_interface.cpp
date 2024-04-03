@@ -19,6 +19,13 @@ private:
     rclcpp::Publisher<Buttons>::SharedPtr buttons_state_publisher;
     int pi_handle;
     rclcpp::TimerBase::SharedPtr timer_;
+    int stop_count;
+    int start_count;
+    int pause_count;
+    int restart_count;
+    int extra_count;
+    int last_index;
+    int index_count;
 
 public:
     ButtonReaderNode() : Node("button_reader_node"), combined_state(0), initial_state_published(false) {
@@ -39,11 +46,18 @@ public:
 
         // Setup GPIO interrupts
         for (int pin : button_pins) {
-            callback_ex(pi_handle, pin, EITHER_EDGE, &ButtonReaderNode::button_interrupt_callback, this);
+            callback_ex(pi_handle, pin, FALLING_EDGE, &ButtonReaderNode::button_interrupt_callback, this);
         }
-      
         
-        timer_ = this->create_wall_timer(100ms, std::bind(&ButtonReaderNode::publish_button_state, this));
+        stop_count = 0;
+        start_count = 0;
+        pause_count = 0;
+        restart_count = 0;
+        extra_count = 0;
+        last_index = 0;
+        index_count = 0;
+        
+        timer_ = this->create_wall_timer(300ms, std::bind(&ButtonReaderNode::publish_button_state, this));
         
     }
 
@@ -65,23 +79,37 @@ private:
         
         // Determine the index of the button pin
         auto it = std::find(node->button_pins.begin(), node->button_pins.end(), gpio);
+        
         if (it != node->button_pins.end()) {
+            
+            
+            
             int index = std::distance(node->button_pins.begin(), it);
-
+            if (node->last_index != index){
+                node->index_count = 0;
+            }
+            node->index_count += 1;
+                
+            node->last_index = index;
+            
             // Update combined state based on button activation
             // Use a bitmask to set specific bits corresponding to the buttons that are pressed
-            node->combined_state = 1 + index;
-
+            
+            //node->combined_state |= (1 << index);
            
             // Publish the button state if the initial state has been published
-            if (node->initial_state_published) {
-                node->publish_button_state();
-            } else {
-                node->initial_state_published = true;
-            }
+            if (node->index_count >= 7){
+				node->combined_state = 1 + index;
+                if (node->initial_state_published) {
+                    node->publish_button_state();
+                } else {
+                    node->initial_state_published = true;
+                }
 
-            // Print the activation of the button
-            RCLCPP_INFO(node->get_logger(), "Button %d activated", index);
+                // Print the activation of the button
+                RCLCPP_INFO(node->get_logger(), "Button %d activated", index);
+                node->index_count = 0;
+            }
         } else {
             //RCLCPP_WARN(node->get_logger(), "Unknown button pin %d", gpio);
         }

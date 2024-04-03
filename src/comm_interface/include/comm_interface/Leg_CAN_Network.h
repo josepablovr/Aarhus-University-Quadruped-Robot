@@ -45,7 +45,9 @@ private:
     
     ControlMode mode;
     float restart_pos[3] = {0.00, 60.75, -121.50};
-    int restart_speed = 10;
+    float standing_pos_1[3] = {0.00, 55.25, -110.50};
+    float standing_pos_2[3] = {0.00, 42.87, -85.74};
+    int restart_speed = 50;
     EncoderCounter shoulder_Encoder;
     EncoderCounter hip_Encoder;
     EncoderCounter knee_Encoder;
@@ -76,7 +78,7 @@ private:
     void Setup_Network();
 
     void Update_Encoders(Leg* leg, EncoderCounter* Encoders);
-
+    void Update_Leg_status();
     void Start_Encoders(Leg* leg, EncoderCounter* Encoders);
 };
 

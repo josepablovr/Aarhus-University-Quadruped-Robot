@@ -14,3 +14,6 @@ float32 knee_joint_speed
 float32 shoulder_joint_torque
 float32 hip_joint_torque
 float32 knee_joint_torque
+
+#Network Status
+int32 failed_messages
