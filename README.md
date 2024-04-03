@@ -15,9 +15,7 @@ Perform a build of your workspace
     colcon build
 
 
-### Launch Control Interface Node
 
-    ros2 run control_interface_package button_reader
 
 ### Launch Control Interface Node
 
