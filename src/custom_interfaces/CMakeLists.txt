@@ -27,6 +27,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Leds.msg"
   "msg/LegReadings.msg"
   "msg/LegCommands.msg"
+  "msg/LegStates.msg"
+  "msg/StateEstimation.msg"
 )
 ament_export_dependencies(rosidl_default_runtime)
 ament_package()

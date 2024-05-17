@@ -33,6 +33,19 @@ Run with customized parameter file:
     ros2 run comm_interface leg_comm
 
 
+### Launch Crawl Gait Node
+
+    ros2 run gait_pkg crawl_gait
+    
+    
+### Launch State Estimator
+
+    ros2 run estimation_pkg state_estimation
+    
+    
+### Software Arquitecture Implementation
+
+![Control Arquitecture](Robot_Software_Arquitecture.jpg)
 
 
 ### Control Interface Basic Test
