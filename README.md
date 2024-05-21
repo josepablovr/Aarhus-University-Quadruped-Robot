@@ -1,7 +1,7 @@
 # AU Quadruped Robot ROS2 Code
 
 ## Description
-ROS2 drivers to control the Motors with position and torque commands
+ROS2 drivers to DC Brushless control the Motors with position and torque commands.
 
 IMU Drivers for BNO055 based on [Evan Flynn work](https://github.com/flynneva/bno055)
 
