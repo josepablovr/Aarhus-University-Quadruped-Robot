@@ -69,6 +69,7 @@ public:
     // Function to run communication based on robot state and control mode
     void runCommunication(int state, int control_Mode, float publishedPositionCommand[3],
                           int publishedSpeedPosCtr[3], float publishedTorquesCommand[3]);
+    void RESTART_Network();
 
 private:
   

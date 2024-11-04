@@ -100,10 +100,10 @@ void Leg_CAN_Network::runCommunication(int state, int control_Mode, float publis
             }               
             break;
         case START:
-            mode = Position_Control;                
+            mode = controlMode;                
             for (int i = 0; i < 3; ++i) {
-                joint_commands[i] = standing_pos_1[i];
-                speed_commands[i] = restart_speed;
+                //joint_commands[i] = standing_pos_1[i];
+                //speed_commands[i] = restart_speed;
             }   
             break;   
             
@@ -265,6 +265,29 @@ void Leg_CAN_Network::Setup_Network(){
     }
     std::cout << "Successfully Started" << std::endl;
 }
+
+
+void Leg_CAN_Network::RESTART_Network(){
+    // Bring up the CAN interface with the specified bitrate
+    std::string command = "sudo ip link set dev " + std::string(interface_name) + " up type can bitrate 1000000";
+    int result = system(command.c_str());
+
+    if (result != 0) {
+        //std::cerr << "Failed to bring up CAN interface " << interface_name << std::endl;
+        //std::cout << "Restarting the interface " << interface_name << std::endl;
+        //system(("sudo ip link set dev " + std::string(interface_name) + " down").c_str());
+        
+        result = system(command.c_str());
+        if (result != 0) {
+            std::cerr << "Failed to restart CAN interface " << interface_name << std::endl;
+            return;
+        }
+    }
+    std::cout << "Successfully Restarted" << std::endl;
+    
+    s = setupCANSocket(interface_name);
+}
+
 
 void Leg_CAN_Network::Update_Encoders(Leg* leg, EncoderCounter* Encoders){
     leg->shoulder.angular_position = Encoders[0].get_multi_turn(leg->shoulder.single_angle_position);
