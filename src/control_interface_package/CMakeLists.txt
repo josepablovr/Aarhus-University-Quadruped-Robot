@@ -11,8 +11,8 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(custom_interfaces REQUIRED)
 
-add_executable(button_reader src/control_interface.cpp)
-add_executable(led_state src/led_interface.cpp)
+add_executable(button_reader src/control_interface_2.cpp)
+add_executable(led_state src/led_interface_2.cpp)
 add_executable(led_test src/led_publisher.cpp)
 ament_target_dependencies(button_reader rclcpp std_msgs custom_interfaces)
 ament_target_dependencies(led_state rclcpp std_msgs custom_interfaces)
@@ -44,21 +44,26 @@ target_link_libraries(button_reader
   ${rclcpp_LIBRARIES}
   pigpiod_if2
   pthread
+  gpiod
+ -lgpiodcxx
 )
 target_link_libraries(led_state
   ${rclcpp_LIBRARIES}
   pigpiod_if2
   pthread
+  gpiod
 )
 
 target_link_libraries(led_state
   ${rclcpp_LIBRARIES}
   pigpiod_if2
   pthread
+  gpiod
 )
 target_link_libraries(led_test
   ${rclcpp_LIBRARIES}
   pigpiod_if2
   pthread
+  gpiod
 )
 ament_package()
