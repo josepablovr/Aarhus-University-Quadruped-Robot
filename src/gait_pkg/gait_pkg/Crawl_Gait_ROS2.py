@@ -32,10 +32,11 @@ class LegController(Node):
         
         self.imu_received = False
         self.states_received = False
+        print("Start")
         
     def publish_leg_commands(self):
         msg = LegCommands()
-        msg_states = LegStates()
+        
         # Update crawl gait elapsed time
         self.crawl_gait.elapsed_time = self.elapsed_time
 
@@ -43,8 +44,8 @@ class LegController(Node):
         if self.step == 0:
             if self.crawl_gait.start() == 1:
                 # Prompt user to input key command
-                print("Press any key to continue...")
-                input()  # Wait for user input
+                #print("Press any key to continue...")
+                #input()  # Wait for user input
                 self.elapsed_time = 0
                 self.crawl_gait.elapsed_time = 0
                 self.step = 1
@@ -76,10 +77,14 @@ class LegController(Node):
         elif self.step == 6:        
             if self.crawl_gait.Swing_Leg("FR") == 1:
                 self.elapsed_time = 0
-                print("GAIT FINISHED press any key to restart...")
-                input()  # Wait for user input
+                #print("GAIT FINISHED press any key to restart...")
+                #input()  # Wait for user input
+                self.step = 1
+                
+        elif self.step == 7:        
+            if self.crawl_gait.Swing_Leg_3D("FL") == 1:
+                self.elapsed_time = 0          
                 self.step = 0
-        
         
         
         # Increment elapsed time
@@ -93,7 +98,7 @@ class LegController(Node):
         msg.joint_angles = leg_angles[0]  # Actual joint angles from crawl gait
         msg.joint_speed = [self.crawl_gait.speed, self.crawl_gait.speed, self.crawl_gait.speed]  # Example joint speeds
         msg.joint_torques = [0.0, 0.0, 0.0]  # Example joint torques
-        
+        #print(leg_angles[0])
         # Publish the message
         self.FL_publisher_.publish(msg)
         msg.joint_angles = leg_angles[1]  # Actual joint angles from crawl gait
@@ -103,8 +108,11 @@ class LegController(Node):
         msg.joint_angles = leg_angles[3]  # Actual joint angles from crawl gait
         self.BR_publisher_.publish(msg)
         
+        msg_states = LegStates()
         msg_states.leg_states = self.crawl_gait.states
+        #print(msg_states)
         self.States_publisher_.publish(msg_states)
+        
 def main(args=None):
     rclpy.init(args=args)
     leg_controller = LegController()
