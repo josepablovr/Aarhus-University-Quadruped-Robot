@@ -6,7 +6,7 @@ The purpose of this project is to create an easily manufacturable quadruped robo
 The simulation aspect is still confidential and requires migration to ROS2 Humble - stay tuned for updates!
 This repository also showcases the development of high performance hardware interfaces and demonstrations of the robot operating in real-life scenarios.
 
-![Robot](robot_photo.jpg)
+<img src="imgs/robot_photo.png" alt="Robot" width="400"/>
 
 ## Prerequisites
 
@@ -108,13 +108,13 @@ Watch a demonstration of the control box used to test our controlllers
 
 ### Crawl Gait Demo
 Watch a demonstration of the robot performing a static gait walking forward
-![Crawl_Gait](crawl_tn.jpg)
+![Crawl_Gait](imgs/gait_tn.jpg)
 [click here to watch](https://youtube.com/shorts/MwS2y61EkHA?feature=shared).
 
 
 ### Cartesian Force Control Demo
 Watch a demonstration of an advanced control scheme implemented in a single leg
-![Control](force_control_tn.jpg)
+![Control](imgs/f_control_tn.jpg)
 [click here to watch](https://youtube.com/shorts/F7HndIHD2LE?feature=share).
 
 
