@@ -53,11 +53,12 @@ To launch the Control Interface Node, run:
 ros2 run control_interface_package button_reader
 ```
 
-### IMU Node
+### IMU Node 
 To launch the IMU Node with a custom parameter file, use:
 ```bash
-ros2 run bno055 bno055 --ros-args --params-file ./src/bno055/bno055/params/bno055_params.yaml
+ros2 run imu_bno055 bno055_i2c_node 
 ```
+Note: credits to [dheera](https://github.com/dheera/ros-imu-bno055)
 
 ### Actuators Node
 Launch the Actuators Node with:
