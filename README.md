@@ -8,6 +8,15 @@ This repository also showcases the development of high performance hardware inte
 
 <img src="imgs/robot_photo.png" alt="Robot" width="400"/>
 
+Highlights of the current version and my contributions to the software of this project:
+
+- High-performance and reliable hardware interface for our 12 actuators, enabling feedback at 500Hz.
+- Control box that provides commands with minimal latency, thanks to asynchronous interruptions.
+- Kalman filter used to fuse data from the IMU and the kinematic model of the legs, capable of tracking the position of the robot in real time.
+- Gait package that supports a crawl gait using Bezier curves, mimicking natural leg swings.
+- ROS2 drivers to run more advanced controllers on the current system.
+
+
 ## Prerequisites
 
 - **Docker**: Ensure that Docker is installed on your system.
@@ -104,6 +113,9 @@ Note: Some of the nodes have not been implemented.
 ## Take a look at our Demos!
 ### Control Interface Demo
 Watch a demonstration of the control box used to test our controlllers
+
+<img src="imgs/buttons_tn.jpg" alt="Control Box" width="300"/>
+
 [here](https://youtube.com/shorts/MwS2y61EkHA?feature=shared).
 
 ### Crawl Gait Demo
@@ -117,7 +129,7 @@ Watch a demonstration of the robot performing a static gait walking forward
 ### Cartesian Force Control Demo
 Watch a demonstration of an advanced control scheme implemented in a single leg
 
-<img src="imgs/f_control_tn.jpg" alt="Control" width="400"/>
+<img src="imgs/f_control_tn.jpg" alt="Control" width="300"/>
 
 [click here to watch](https://youtube.com/shorts/F7HndIHD2LE?feature=share).
 
@@ -128,3 +140,10 @@ Watch a demonstration of an advanced control scheme implemented in a single leg
 
 - Ensure that all commands are executed in the correct environment.
 - Review your workspace paths to avoid any errors during the Docker run command.
+
+
+### Future of this project:
+
+- Migration of Gazebo simulation to ROS2 Humble.
+- Implementation of a faster IMU to enable better control schemes.
+- Implementation and adaptation of our developed controllers for dynamic gaits (WBC + MPC).
