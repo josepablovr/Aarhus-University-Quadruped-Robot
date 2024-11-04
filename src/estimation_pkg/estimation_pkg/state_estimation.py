@@ -147,7 +147,7 @@ class TopicRecorder(Node):
     
     
     def run_kalman(self):
-        self.CoM_pos, self.CoM_vel = self.Estimator.Run(self.FL_angles, self.FR_angles, self.BL_angles, self.BR_angles, self.leg_status,self.latest_imu_quaternion, self.latest_imu_acceleration, self.latest_imu_speed)
+        self.CoM_pos, self.CoM_vel = self.Estimator.Run(self.FL_angles, self.FR_angles, self.BL_angles, self.BR_angles, self.leg_status,self.latest_imu_data)
     
     
     def listener_callback(self):

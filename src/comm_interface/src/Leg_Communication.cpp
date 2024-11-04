@@ -20,16 +20,28 @@ private:
     
     
     rclcpp::Subscription<custom_interfaces::msg::Buttons>::SharedPtr control_interface_subscription_;
-    rclcpp::Subscription<custom_interfaces::msg::LegCommands>::SharedPtr leg_commands_subscription_;
+    rclcpp::Subscription<custom_interfaces::msg::LegCommands>::SharedPtr FL_leg_commands_subscription_;
+    rclcpp::Subscription<custom_interfaces::msg::LegCommands>::SharedPtr FR_leg_commands_subscription_;
+    rclcpp::Subscription<custom_interfaces::msg::LegCommands>::SharedPtr BL_leg_commands_subscription_;
+    rclcpp::Subscription<custom_interfaces::msg::LegCommands>::SharedPtr BR_leg_commands_subscription_;
+    
+    
     rclcpp::Publisher<custom_interfaces::msg::Leds>::SharedPtr led_publisher_;
     
     
     
     // Variables to store the current state
     int state_ = 0;
-    int control_mode_ = 2;
-    float position_cmds_[3];
-    int position_cmds_speeds_[3];
+    int control_mode_ = 4;
+    float FL_position_cmds_[3];
+    int FL_position_cmds_speeds_[3];
+    float FR_position_cmds_[3];
+    int FR_position_cmds_speeds_[3];
+    float BL_position_cmds_[3];
+    int BL_position_cmds_speeds_[3];
+    float BR_position_cmds_[3];
+    int BR_position_cmds_speeds_[3];
+    
     float torque_cmds_[3];
     const char* interface_FL = "can1"; // Example interface name
     const char* interface_FR = "can0"; // Example interface name
@@ -41,6 +53,10 @@ private:
     Leg BL_leg_memory;
     Leg BR_leg_memory;
     
+    Leg_commands FL_commands;
+    Leg_commands FR_commands;
+    Leg_commands BL_commands;
+    Leg_commands BR_commands;
     
 public:
      ButtonProcessorNode() : Node("button_processor_node"), state_(IDLE)              {
@@ -72,19 +88,11 @@ public:
         BL_leg_memory = legCAN_BL_.leg;
         BR_leg_memory = legCAN_BR_.leg;
         
-        position_cmds_[0] = 0.0f;
-        position_cmds_[1] = 60.75f;
-        position_cmds_[2] = -121.50f;
-
-        // Initialize position_cmds_speeds_
-        position_cmds_speeds_[0] = 1;
-        position_cmds_speeds_[1] = 1;
-        position_cmds_speeds_[2] = 1;
-    
-        // Initialize torque_cmds_
-        torque_cmds_[0] = 0.0f;
-        torque_cmds_[1] = 0.0f;
-        torque_cmds_[2] = 0.0f;
+        
+		restart_commands(FL_commands);
+        restart_commands(FR_commands);
+        restart_commands(BL_commands);
+        restart_commands(BR_commands);
         
        
     
@@ -101,86 +109,75 @@ public:
         control_interface_subscription_ = this->create_subscription<custom_interfaces::msg::Buttons>(
             "buttons_state", 10, std::bind(&ButtonProcessorNode::buttons_state_callback, this, std::placeholders::_1));
         
-        leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>(
-            "leg_commands", 10, std::bind(&ButtonProcessorNode::leg_commands_callback, this, std::placeholders::_1));
+        FL_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>("FL_leg_commands",
+        10,[&](const custom_interfaces::msg::LegCommands::SharedPtr msg) {leg_commands_callback(msg, FL_commands);
+        }); 
+        
+        FR_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>("FR_leg_commands",
+        10,[&](const custom_interfaces::msg::LegCommands::SharedPtr msg) {leg_commands_callback(msg, FR_commands);
+        }); 
+        
+        BL_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>("BL_leg_commands",
+        10,[&](const custom_interfaces::msg::LegCommands::SharedPtr msg) {leg_commands_callback(msg, BL_commands);
+        }); 
+        
+        BR_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>("BR_leg_commands",
+        10,[&](const custom_interfaces::msg::LegCommands::SharedPtr msg) {leg_commands_callback(msg, BR_commands);
+        }); 
+		
+        //FR_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>(
+		//"FR_leg_commands", 10,
+		//std::bind(&ButtonProcessorNode::leg_commands_callback, this, std::placeholders::_1, std::ref(&FR_commands)));
+		
+		//BL_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>(
+		//"BL_leg_commands", 10,
+		//std::bind(&ButtonProcessorNode::leg_commands_callback, this, std::placeholders::_1, std::ref(&BL_commands)));
+		
+		//BR_leg_commands_subscription_ = this->create_subscription<custom_interfaces::msg::LegCommands>(
+		//"BR_leg_commands", 10,
+		//std::bind(&ButtonProcessorNode::leg_commands_callback, this, std::placeholders::_1, std::ref(&BR_commands)));
             
         // Run the switch-case logic continuously in separate threads
         std::cout << "NETWORKS STARTED" << std::endl;
-        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_FL_), std::ref(leg_readings_publisher_FL_leg_), std::ref(FL_leg_memory), std::ref(position_cmds_) , std::ref(position_cmds_speeds_) , std::ref(torque_cmds_)).detach();
-        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_FR_), std::ref(leg_readings_publisher_FR_leg_), std::ref(FR_leg_memory), std::ref(position_cmds_) , std::ref(position_cmds_speeds_) , std::ref(torque_cmds_)).detach();
-        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_BL_), std::ref(leg_readings_publisher_BL_leg_), std::ref(BL_leg_memory), std::ref(position_cmds_) , std::ref(position_cmds_speeds_) , std::ref(torque_cmds_)).detach();
-        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_BR_), std::ref(leg_readings_publisher_BR_leg_), std::ref(BR_leg_memory), std::ref(position_cmds_) , std::ref(position_cmds_speeds_) , std::ref(torque_cmds_)).detach();
+        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_FL_), std::ref(leg_readings_publisher_FL_leg_), std::ref(FL_leg_memory), std::ref(FL_commands)).detach();
+        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_FR_), std::ref(leg_readings_publisher_FR_leg_), std::ref(FR_leg_memory), std::ref(FR_commands)).detach();
+        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_BL_), std::ref(leg_readings_publisher_BL_leg_), std::ref(BL_leg_memory), std::ref(BL_commands)).detach();
+        std::thread(&ButtonProcessorNode::process, this, std::ref(legCAN_BR_), std::ref(leg_readings_publisher_BR_leg_), std::ref(BR_leg_memory), std::ref(BR_commands)).detach();
+        
         std::thread(&ButtonProcessorNode::publish_leg_reading, this, std::ref(FL_leg_memory), std::ref(leg_readings_publisher_FL_leg_)).detach();
         std::thread(&ButtonProcessorNode::publish_leg_reading, this, std::ref(FR_leg_memory), std::ref(leg_readings_publisher_FR_leg_)).detach();
         std::thread(&ButtonProcessorNode::publish_leg_reading, this, std::ref(BL_leg_memory), std::ref(leg_readings_publisher_BL_leg_)).detach();
         std::thread(&ButtonProcessorNode::publish_leg_reading, this, std::ref(BR_leg_memory), std::ref(leg_readings_publisher_BR_leg_)).detach();
+        
     }
 private:
 
-    void process(Leg_CAN_Network legCAN, rclcpp::Publisher<custom_interfaces::msg::LegReadings>::SharedPtr publisher, Leg& leg_memory, float position_cmds_[3], int position_cmds_speeds_[3], float torque_cmds_[3]) {
-        
+    void process(Leg_CAN_Network legCAN, rclcpp::Publisher<custom_interfaces::msg::LegReadings>::SharedPtr publisher, Leg& leg_memory, Leg_commands& Leg_cmd) {
+        rclcpp::Rate rate(500); // 500 Hz
         auto last_pub_time = this->now();
-        float joint_commands[3];
-        joint_commands[0] = position_cmds_[0];
-        joint_commands[1] = position_cmds_[1];
-        joint_commands[2] = position_cmds_[2];
-    
-        int speed_commands[3];
-        speed_commands[0] = position_cmds_speeds_[0];
-        speed_commands[1] = position_cmds_speeds_[1];
-        speed_commands[2] = position_cmds_speeds_[2];
-    
-        float torque_commands[3];
-        torque_commands[0] = torque_cmds_[0];
-        torque_commands[1] = torque_cmds_[1];
-        torque_commands[2] = torque_cmds_[2];
-        
+                
         
         
         while (rclcpp::ok()) {
             
-            //std::cout << "Should 1: " << legCAN.leg.shoulder.single_angle_position << std::endl;     
-            legCAN.runCommunication(state_, control_mode_, joint_commands, speed_commands, torque_commands);
+            //std::cout << "FAILED: " << legCAN.leg.failed_messages << std::endl;     
+            
             leg_memory = legCAN.leg;
-            //if ((this->now() - last_pub_time).seconds() >= 1.0 / 100)
-            //{
-                //custom_interfaces::msg::LegReadings leg_readings_msg;
-                //leg_readings_msg.shoulder_joint_angle = legCAN.corrected_encoders[0];
-                //leg_readings_msg.hip_joint_angle = legCAN.corrected_encoders[1];
-                //leg_readings_msg.knee_joint_angle = legCAN.corrected_encoders[2];
-                
-                //leg_readings_msg.shoulder_joint_speed = legCAN.corrected_speeds[0];
-                //leg_readings_msg.hip_joint_speed = legCAN.corrected_speeds[1];
-                //leg_readings_msg.knee_joint_speed = legCAN.corrected_speeds[2];
-                
-                //leg_readings_msg.shoulder_joint_torque = legCAN.corrected_torques[0];
-                //leg_readings_msg.hip_joint_torque = legCAN.corrected_torques[1];
-                //leg_readings_msg.knee_joint_torque = legCAN.corrected_torques[2];
-                
-                //publisher->publish(leg_readings_msg);
-                
-                //last_pub_time = this->now();
-            //}
+            if (legCAN.leg.failed_messages >= 2){
+				legCAN.RESTART_Network();
+				legCAN.leg.failed_messages = 0;}
+			else{
+				legCAN.runCommunication(state_, Leg_cmd.control_mode, Leg_cmd.joint_angles, Leg_cmd.joint_speeds, Leg_cmd.joint_torques);}
+				
+            rate.sleep();
         }
     }
     
     
-     void publish_leg_readings() {
-        rclcpp::Rate rate(100);  // 100 Hz
-        
-        while (rclcpp::ok()) {
-            publish_leg_reading(FL_leg_memory, leg_readings_publisher_FL_leg_);
-            publish_leg_reading(FR_leg_memory, leg_readings_publisher_FR_leg_);
-            publish_leg_reading(BL_leg_memory, leg_readings_publisher_BL_leg_);
-            publish_leg_reading(BR_leg_memory, leg_readings_publisher_BR_leg_);
-            
-            rate.sleep();  // Maintain the desired publishing rate
-        }
-    }
     
     void publish_leg_reading(Leg& leg_memory, rclcpp::Publisher<custom_interfaces::msg::LegReadings>::SharedPtr publisher) {
         
-        rclcpp::Rate rate(100);
+        rclcpp::Rate rate(500);
         while (rclcpp::ok()) {
             custom_interfaces::msg::LegReadings leg_readings_msg;
             leg_readings_msg.shoulder_joint_angle = leg_memory.shoulder.joint_angle;
@@ -207,10 +204,33 @@ private:
         //std::cerr << "Button Received" << state_ <<std::endl;
     }
     
-    void leg_commands_callback(const custom_interfaces::msg::LegCommands::SharedPtr msg) {
-        // Update the state variables based on the callback
-    }
    
+    
+    void leg_commands_callback(const custom_interfaces::msg::LegCommands::SharedPtr msg, Leg_commands& leg_commands) {
+        // Update the state variables based on the callback
+        leg_commands.control_mode = msg->control_mode;
+		std::copy(msg->joint_angles.begin(), msg->joint_angles.begin() + 3, leg_commands.joint_angles);
+		std::copy(msg->joint_speed.begin(), msg->joint_speed.begin() + 3, leg_commands.joint_speeds);
+		std::copy(msg->joint_torques.begin(), msg->joint_torques.begin() + 3, leg_commands.joint_torques);
+        //std::cout << "Should 1: " << leg_commands.joint_angles[0] << std::endl; 
+    }
+    
+    void restart_commands(Leg_commands& Leg_cmd){
+		Leg_cmd.control_mode = 2;  
+    
+		Leg_cmd.joint_angles[0] = 0.0f;          
+		Leg_cmd.joint_angles[1] = 60.75f;
+		Leg_cmd.joint_angles[2] = -121.50f;
+		
+		Leg_cmd.joint_speeds[0] = 1;
+		Leg_cmd.joint_speeds[1] = 1;
+		Leg_cmd.joint_speeds[2] = 1;
+		
+		Leg_cmd.joint_torques[0] = 0.0f;
+		Leg_cmd.joint_torques[1] = 0.0f;
+		Leg_cmd.joint_torques[2] = 0.0f;	
+	};
+	
     
 };
 

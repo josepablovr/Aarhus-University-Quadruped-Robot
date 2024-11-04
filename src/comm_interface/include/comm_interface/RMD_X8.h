@@ -36,9 +36,11 @@
 
 
 
-#define SPEED_MIN 1 // This is just an example, adjust as needed
+#define SPEED_MIN 1 
 #define SPEED_MAX 500 // Maximum acceptable value
 
+#define TORQUE_MIN 0.00001f  
+#define TORQUE_MAX 3.00f // Maximum acceptable value
 
 typedef struct {
     int16_t leg_index;
@@ -92,12 +94,22 @@ typedef struct {
 
 typedef struct {
     unsigned int leg_index;    
-    Motor_Status shoulder;          // Contador de vueltas
-    Motor_Status hip;  // Valor anterior del encoder
-    Motor_Status knee;        // Dirección del encoder
+    Motor_Status shoulder;       
+    Motor_Status hip;  
+    Motor_Status knee;        
     unsigned int failed_messages;
 } Leg;
 
+typedef struct {
+    int control_mode;  
+    
+    float joint_angles[3];          
+        
+    int joint_speeds[3];
+    
+    float joint_torques[3];
+    
+} Leg_commands;
 
 
 

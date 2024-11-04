@@ -242,9 +242,23 @@ void NegToHex(int16_t num, char *hex_str) {
 
 int16_t get_motor_current(float torque) {
     
-    // Calculate torque_current
-    int16_t torque_current = static_cast<int16_t>(round(torque / 2.09 / 33 * 2000)); //Torque constant / Max current float / Max current int
+        
+    // Determine the sign of the input torque
+    float sign = (torque >= 0.0f) ? 1.0f : -1.0f;
 
+    // Take the absolute value of the input torque
+    float abs_torque = std::fabs(torque);
+
+    // Saturate the absolute value between TORQUE_MIN and TORQUE_MAX
+    float saturated_abs_torque = std::max(TORQUE_MIN, std::min(abs_torque, TORQUE_MAX));
+
+    // Restore the original sign to the saturated value
+    float torque_nm = sign * saturated_abs_torque;
+    
+        
+    
+    int16_t torque_current = static_cast<int16_t>(round(torque_nm / 33 * 2000)); //Torque constant / Max current float / Max current int
+	
     // Return torque_current
     return torque_current;
 }
@@ -255,7 +269,7 @@ void command_torque_control(unsigned char data_frame[8], int16_t torque_current)
     if (torque_current > 2000 || torque_current < -2000)
         torque_current = 0;
         
-
+	
     unsigned char can_data[8] = {TORQUE_CLOSED_LOOP, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     if (torque_current == 0)

@@ -5,6 +5,7 @@
 #define MAX_WAIT_TIME_MS 10 // Maximum waiting time in milliseconds
 
 int receiveMessage2(int socket, Leg *leg, unsigned int debug_mode) {
+    //return 0;
     struct can_frame frame;
     fd_set read_fds;    // File descriptor set for select()
     struct timeval tv;  // Timeout structure for select()
@@ -83,7 +84,7 @@ int setupCANSocket(const char *interface) {
 
 
 int sendMessage(int socket, int can_id, const unsigned char data[], int data_length, unsigned int debug_mode) {
-    
+    //return 0;
     //std::cout << "Channel: " << s << ", P0: " << position_command[0] << ", P1: " << position_command[1] << ", P2: " << position_command[2] << "V " << speed_pos_ctr[0] << std::endl;
     //std::cout << "Channel: " << socket << ",  ID: " << can_id <<  ", Data: ";
     //std::cout << "0x";
@@ -151,12 +152,33 @@ int get_Multi_turn_angle(int s, Leg *leg){
     int debug = 0;   
     int msgs_received = 0;
     unsigned char data_frame[8];
-    command_read_multi_turn_angle(data_frame);   
+    
+    //FAST MODE
+    //command_read_multi_turn_angle(data_frame);   
+                
+    //sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
+    //sendMessage(s, leg->hip.id, data_frame, 8, 0);
+    //if (receiveMessage2(s, leg, debug) == 0)         
+        //msgs_received += 1;                    
+    //if (receiveMessage2(s, leg, debug) == 0) 
+        //msgs_received += 1; 
+    //sendMessage(s, leg->knee.id, data_frame, 8, 0);
+    //if (receiveMessage2(s, leg, debug) == 0)          
+        //msgs_received += 1;
+        
+    //if (msgs_received != 3){
+		//std::cout << "LOST MESSAGE" << std::endl;
+		//leg->failed_messages += 1;
+        //return 0;
+	//}
+	
+	//SAFE MODE
+	command_read_multi_turn_angle(data_frame);   
                 
     sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
-    sendMessage(s, leg->hip.id, data_frame, 8, 0);
     if (receiveMessage2(s, leg, debug) == 0)         
-        msgs_received += 1;                    
+        msgs_received += 1;    
+    sendMessage(s, leg->hip.id, data_frame, 8, 0);                    
     if (receiveMessage2(s, leg, debug) == 0) 
         msgs_received += 1; 
     sendMessage(s, leg->knee.id, data_frame, 8, 0);
@@ -177,13 +199,26 @@ int get_Read_Status(int s, Leg *leg){
     unsigned char data_frame[8];    
     command_read_motor_status_2(data_frame);          
     //std::cout << "Message 1: " << static_cast<void*>(data_frame) << std::endl;     
+    
+    //FAST MODE
+    //sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
+        
+    //sendMessage(s, leg->hip.id, data_frame, 8, 0);
+    //if (receiveMessage2(s, leg, debug) == 0)         
+        //msgs_received += 1;                    
+    //if (receiveMessage2(s, leg, debug) == 0) 
+        //msgs_received += 1; 
+    //sendMessage(s, leg->knee.id, data_frame, 8, 0);
+    //if (receiveMessage2(s, leg, debug) == 0)          
+        //msgs_received += 1;
+    
+    
+    
+    //SAFE MODE
     sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
-    
-    
-    
-    sendMessage(s, leg->hip.id, data_frame, 8, 0);
     if (receiveMessage2(s, leg, debug) == 0)         
-        msgs_received += 1;                    
+        msgs_received += 1; 
+    sendMessage(s, leg->hip.id, data_frame, 8, 0);                       
     if (receiveMessage2(s, leg, debug) == 0) 
         msgs_received += 1; 
     sendMessage(s, leg->knee.id, data_frame, 8, 0);
@@ -202,6 +237,7 @@ int get_Torque_Control(int s, Leg *leg, float torques_command[3]){
     unsigned char data_frame[8];
     int msgs_received = 0;
     real_robot_commands_torques(leg->leg_index, torques_command);
+    
     int shoulder_current_torque;
     int hip_current_torque;
     int knee_current_torque;
@@ -211,15 +247,31 @@ int get_Torque_Control(int s, Leg *leg, float torques_command[3]){
     hip_current_torque = get_motor_current(torques_command[1]);
     knee_current_torque = get_motor_current(torques_command[2]);
     
-    
+    //FAST MODE    
+    //command_torque_control(data_frame, shoulder_current_torque);              
+    //sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
+    //command_torque_control(data_frame, hip_current_torque);
+    //sendMessage(s, leg->hip.id, data_frame, 8, 0);
+    //if (receiveMessage2(s, leg, debug) == 0)         
+        //msgs_received += 1;                    
+    //if (receiveMessage2(s, leg, debug) == 0) 
+        //msgs_received += 1; 
+    //command_torque_control(data_frame, knee_current_torque);
+    //sendMessage(s, leg->knee.id, data_frame, 8, 0);
+    //if (receiveMessage2(s, leg, debug) == 0)          
+        //msgs_received += 1;
+        
+    //SAFE MODE
     command_torque_control(data_frame, shoulder_current_torque);              
     sendMessage(s, leg->shoulder.id, data_frame, 8, 0);
-    command_torque_control(data_frame, hip_current_torque);
-    sendMessage(s, leg->hip.id, data_frame, 8, 0);
     if (receiveMessage2(s, leg, debug) == 0)         
-        msgs_received += 1;                    
+        msgs_received += 1; 
+    
+    command_torque_control(data_frame, hip_current_torque);
+    sendMessage(s, leg->hip.id, data_frame, 8, 0);                       
     if (receiveMessage2(s, leg, debug) == 0) 
         msgs_received += 1; 
+        
     command_torque_control(data_frame, knee_current_torque);
     sendMessage(s, leg->knee.id, data_frame, 8, 0);
     if (receiveMessage2(s, leg, debug) == 0)          
@@ -264,29 +316,37 @@ int get_Position_Control(int s, Leg *leg, float position_command[3], int speed_p
     if(Security_Position_Joint(position_command) == 1){
     
         real_robot_commands_angles(leg->leg_index, joint_commands);
-               
-        command_position_control_2(data_frame, joint_commands[0], speed_commands[0]); 
         
-               
-         
-        sendMessage(s, leg->shoulder.id, data_frame, 8, 0);									
-        command_position_control_2(data_frame, joint_commands[1], speed_commands[1]);
-        
-        
-        sendMessage(s, leg->hip.id, data_frame, 8, 0);
-        
-        
+        //FAST MODE
+        //command_position_control_2(data_frame, joint_commands[0], speed_commands[0]);     
+        //sendMessage(s, leg->shoulder.id, data_frame, 8, 0);			
+        //command_position_control_2(data_frame, joint_commands[1], speed_commands[1]);
+        //sendMessage(s, leg->hip.id, data_frame, 8, 0);
+        //if (receiveMessage2(s, leg, debug) == 0)         
+            //msgs_received += 1;                    
+        //if (receiveMessage2(s, leg, debug) == 0) 
+            //msgs_received += 1; 
+        //command_position_control_2(data_frame, joint_commands[2], speed_commands[2]);
+        //sendMessage(s, leg->knee.id, data_frame, 8, 0);      
+        //if (receiveMessage2(s, leg, debug) == 0)          
+            //msgs_received += 1;
+		
+		//SAFE MODE
+		command_position_control_2(data_frame, joint_commands[0], speed_commands[0]);     
+        sendMessage(s, leg->shoulder.id, data_frame, 8, 0);	
         if (receiveMessage2(s, leg, debug) == 0)         
-            msgs_received += 1;                    
+            msgs_received += 1; 
+            		
+        command_position_control_2(data_frame, joint_commands[1], speed_commands[1]);
+        sendMessage(s, leg->hip.id, data_frame, 8, 0);                           
         if (receiveMessage2(s, leg, debug) == 0) 
             msgs_received += 1; 
+            
         command_position_control_2(data_frame, joint_commands[2], speed_commands[2]);
-        sendMessage(s, leg->knee.id, data_frame, 8, 0);
-        
-        
+        sendMessage(s, leg->knee.id, data_frame, 8, 0);      
         if (receiveMessage2(s, leg, debug) == 0)          
             msgs_received += 1;
-    
+		
         if (msgs_received != 3){
 			std::cout << "LOST MESSAGE" << std::endl;
 			leg->failed_messages += 1;

@@ -1,5 +1,6 @@
 from . Robot_Kinematics import RobotLeg
 from . Trajectory import Trajectory_Generator
+from . bezier_3d import Trajectory_Generator as Trajectory_Generator_3D
 import time
 from enum import Enum
 import numpy as np
@@ -11,27 +12,32 @@ class Robot_Movement:
         self.desired_positions = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.desired_velocities = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.stand_height = 0
-        self.swing_step = 0.15
-        self.swing_time = 3 
-        self.swing_height = 0.085
-        self.tilt_time = 3 # 1.5
-        self.phase_time_swing = 2 + self.swing_time  #1.5
-        self.phase_time_tilt = 2 + self.tilt_time #2
-        self.tilt_distance = 0.06
+        self.swing_step = 0.10
+        self.swing_time = 1
+        self.swing_height = 0.07
+        self.tilt_time = 2.5 # 1.5
+        self.phase_time_swing = 0.5 + self.swing_time  #1.5
+        self.phase_time_tilt = 1 + self.tilt_time #2
+        self.tilt_distance = 0.05
         
-        self.max_speed = 200
-        self.restart_speed = 20
+        self.max_speed = 500
+        self.restart_speed = 30
         self.speed = self.max_speed
         self.body_height = -0.4
         self.legs = [RobotLeg("FL"), RobotLeg("FR"), RobotLeg("BL"), RobotLeg("BR")]
+        
         self.Trajectories = [Trajectory_Generator(self.swing_time, self.swing_step*1000, self.swing_height*1000, self.tilt_distance) for _ in range(4)]
+        
+        self.Trajectories3D = [Trajectory_Generator_3D(self.swing_time ,0.1,0.05,0.075,[0.00, 0.078, -0.34]) for _ in range(4)]
+        
+
         self.states = [0, 0, 0, 0]
         self.elapsed_time = 0
         self.dt = 0
         self.Lambda = [1,-1,1,-1]
         self.previous_time = 0
         self.phase_time_start = 10
-        self. z_offset = -self.swing_step/2 -0.05
+        self. z_offset = -self.swing_step/2 -0.015
         self.simulation = False
         self.movement_started = False
         
@@ -61,6 +67,7 @@ class Robot_Movement:
         #desired_positions = [(z_offsets[0], x+x_tilt, y1), (z_offsets[1], -x+x_tilt, y1), (z_offsets[2], x+x_tilt, y1), (z_offsets[3], -x+x_tilt, y1)]
         for i in range(4):
             z_offsets = [1/3*self.swing_step+self.z_offset, self.swing_step+self.z_offset, 0+self.z_offset, 2/3*self.swing_step+self.z_offset]            
+            #z_offsets = [0,0,0,0]
             self.desired_positions[i] = [z_offsets[i], self.Lambda[i]*0.078, self.body_height]
             
         
@@ -82,7 +89,7 @@ class Robot_Movement:
         if self.movement_started == False: 
             self.movement_started = True 
             dt = 0.01
-            self.max_speed = 100
+            self.max_speed = 400
             self.states = [0,0,0,0]
             for i in range(4):
                 x, y, z = self.desired_positions[i]        
@@ -125,7 +132,7 @@ class Robot_Movement:
         if self.movement_started == False:   
                      
             dt = 0.01
-            self.max_speed = 100
+            self.max_speed = 400
             self.states = [0,0,0,0]
             self.states[index] = 1
             self.movement_started = True
@@ -148,6 +155,45 @@ class Robot_Movement:
             self.desired_velocities[i] = velocities
             
         
+        
+        if self.elapsed_time >= self.phase_time_swing:               
+            print("Finished Swinging")
+            self.elapsed_time = 0   
+            self.movement_started = False
+            return 1
+        return 0
+    
+    
+    
+    def Swing_Leg_3D(self, leg):
+        '''
+        side: right=1 or left=-1
+        '''   
+        index = {"FL": 0, "FR": 1, "BL": 2, "BR": 3}[leg]
+            
+        if self.movement_started == False:   
+                     
+            dt = 0
+            self.max_speed = 500
+            self.states = [0,0,0,0]
+            self.states[index] = 1
+            self.movement_started = True
+                     
+            self.Trajectories3D[0].get_control_points(0)
+            self.elapsed_time = 0    
+        else:
+            dt = time.time() - self.previous_time
+            i = 0            
+            positions, velocities = self.Trajectories3D[i].get_Bezier_curve(self.elapsed_time)
+            self.desired_positions[i] = positions         
+            self.desired_velocities[i] = [self.max_speed, self.max_speed, self.max_speed*1.25]
+            
+
+        
+        self.previous_time = time.time()
+        self.elapsed_time += self.dt
+        
+                
         
         if self.elapsed_time >= self.phase_time_swing:               
             print("Finished Swinging")
@@ -209,3 +255,4 @@ if __name__ == "__main__":
     
     
     print("End")
+
