@@ -24,7 +24,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'state_estimation = estimation_pkg.state_estimation:main'
+            'state_estimation = estimation_pkg.ROS_estimation:main',
+            'imu_corrections = estimation_pkg.imu_corrections_alpha:main',            
+            
         ],
 
     },
