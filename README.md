@@ -10,11 +10,11 @@ This repository also showcases the development of high performance hardware inte
 
 ### Highlights of the current version and my contributions to the software of this project:
 
-	- High-performance and reliable hardware interface for our 12 actuators, enabling feedback at 500Hz.
-	- Control box that provides commands with minimal latency, thanks to asynchronous interruptions.
-	- Kalman filter used to fuse data from the IMU and the kinematic model of the legs, capable of tracking the position of the robot in real time.
-	- Gait package that supports a crawl gait using Bezier curves, mimicking natural leg swings.
-	- ROS2 drivers to run more advanced controllers on the current system.
+- High-performance and reliable hardware interface for our 12 actuators, enabling feedback at 500Hz.
+- Control box that provides commands with minimal latency, thanks to asynchronous interruptions.
+- Kalman filter used to fuse data from the IMU and the kinematic model of the legs, capable of tracking the position of the robot in real time.
+- Gait package that supports a crawl gait using Bezier curves, mimicking natural leg swings.
+- ROS2 drivers to run more advanced controllers on the current system.
 
 
 ## Prerequisites
@@ -63,7 +63,7 @@ colcon build
 ## Launching Nodes
 
 ### Control Interface Node
-To launch the Control Interface Node, run:
+To launch the Control Interface (button box) Node, run:
 ```bash
 ros2 run control_interface_package button_reader
 ```
