@@ -108,13 +108,17 @@ Watch a demonstration of the control box used to test our controlllers
 
 ### Crawl Gait Demo
 Watch a demonstration of the robot performing a static gait walking forward
-![Crawl_Gait](imgs/gait_tn.jpg)
-[click here to watch](https://youtube.com/shorts/MwS2y61EkHA?feature=shared).
+
+<img src="imgs/gait_tn.jpg" alt="Control" width="400"/>
+
+[click here to watch](https://youtu.be/HeLdU54lCw4).
 
 
 ### Cartesian Force Control Demo
 Watch a demonstration of an advanced control scheme implemented in a single leg
-![Control](imgs/f_control_tn.jpg)
+
+<img src="imgs/f_control_tn.jpg" alt="Control" width="400"/>
+
 [click here to watch](https://youtube.com/shorts/F7HndIHD2LE?feature=share).
 
 
