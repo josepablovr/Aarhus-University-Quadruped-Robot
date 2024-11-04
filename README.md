@@ -1,8 +1,12 @@
-# AU Quadruped Robot ROS2 Code
+# AU Quadruped Robot
 
 ## Overview
 
-This repository contains the code and instructions for setting up and running the AU Quadruped Robot using ROS2. Follow the steps below to build and launch the necessary components.
+The purpose of this project is to create an easily manufacturable quadruped robot with open-source code. Throughout the design process, we aim to explore various anatomical configurations inspired by animals that are not commonly chosen, such as horses or deer. Currently, the robot has achieved stable crawl gait performance in real life and has successfully implemented dynamic gaits in simulation.
+The simulation aspect is still confidential and requires migration to ROS2 Humble - stay tuned for updates!
+This repository also showcases the development of high performance hardware interfaces and demonstrations of the robot operating in real-life scenarios.
+
+![Robot](robot_photo.jpg)
 
 ## Prerequisites
 
@@ -12,16 +16,18 @@ This repository contains the code and instructions for setting up and running th
 ## Setting Up Docker
 
 ### Building the Docker Image
-
-1. Navigate to your workspace directory:
-    ```bash
+1. Clone the repository in your workspace
+```bash
     cd ws
-    ```
+    git clone https://github.com/josepablovr/Aarhus-University-Quadruped-Robot
+   ```
 
-2. Build the Docker image:
-    ```bash
-    sudo docker build -t wetguard .
-    ```
+2. Navigate to your workspace directory and build the Docker image:
+
+```bash
+    cd ws
+    sudo docker build -t ros2 .
+```
 
 ### Running the Docker Container
 
@@ -54,7 +60,7 @@ ros2 run control_interface_package button_reader
 ```
 
 ### IMU Node 
-To launch the IMU Node with a custom parameter file, use:
+To launch the IMU Node use:
 ```bash
 ros2 run imu_bno055 bno055_i2c_node 
 ```
@@ -78,17 +84,41 @@ To run the State Estimator, use:
 ros2 run estimation_pkg state_estimation
 ```
 
+### Run High-Performance State Estimation Demo
+This is a ROS2 driver of the Unitree Go controllers for this robot
+
+```bash
+ros2 run lowlevel lowlevel
+```
+
 ## Software Architecture
 
 The following diagram illustrates the software architecture implementation:
 
 ![Control Architecture](Robot_Software_Arquitecture.jpg)
 
-## Control Interface Basic Test
+Note: Some of the nodes have not been implemented.
 
-Watch a demonstration of the control interface [here](https://youtube.com/shorts/MwS2y61EkHA?feature=shared).
 
----
+
+## Take a look at our Demos!
+### Control Interface Demo
+Watch a demonstration of the control box used to test our controlllers
+[here](https://youtube.com/shorts/MwS2y61EkHA?feature=shared).
+
+### Crawl Gait Demo
+Watch a demonstration of the robot performing a static gait walking forward
+![Crawl_Gait](crawl_tn.jpg)
+[click here to watch](https://youtube.com/shorts/MwS2y61EkHA?feature=shared).
+
+
+### Cartesian Force Control Demo
+Watch a demonstration of an advanced control scheme implemented in a single leg
+![Control](force_control_tn.jpg)
+[click here to watch](https://youtube.com/shorts/F7HndIHD2LE?feature=share).
+
+
+
 
 ### Notes
 
