@@ -68,6 +68,7 @@ public:
         if (estimation_thread_.joinable()) {
             estimation_thread_.join();
         }
+        delete ctrlComponents.robotModel;  // Clean up raw pointe
     }
 private:
     void imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg) {
